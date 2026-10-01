@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body style="background-color: #99ccff; font-family: 'Times New Roman', serif;">
+
+    <div align="center">
+        <img src="Bai48/Bai48/hinh/Jackson.gif" alt="Jackson Electronics">
+    </div>
+
+    <h1 style="text-align: center; font-size: 22px;">Registration Form</h1>
+    <p style="text-align: center;">Register your Jackson Electronics product here</p>
+
+    <form id="regForm" action="" method="get">
+        <table width="600" align="center" cellspacing="2" cellpadding="1">
+            <tr>
+                <td width="190"><label for="firstname">First Name:</label></td>
+                <td>
+                    <input type="text" name="firstname" id="firstname" size="12">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" name="lastname" id="lastname" size="12">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="address1">Address #1:</label></td>
+                <td><input type="text" name="address1" id="address1" size="32"></td>
+            </tr>
+            <tr>
+                <td><label for="address2">Address #2:</label></td>
+                <td><input type="text" name="address2" id="address2" size="32"></td>
+            </tr>
+            <tr>
+                <td><label for="city">City:</label></td>
+                <td nowrap>
+                    <input type="text" name="city" id="city" size="16">
+                    <label for="state">State:</label>
+                    <input type="text" name="state" id="state" size="3">
+                    <label for="zip">Zip:</label>
+                    <input type="text" name="zip" id="zip" size="7">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="country">Country:</label></td>
+                <td><input type="text" name="country" id="country" size="16" value="United States"></td>
+            </tr>
+        </table>
+
+        <hr width="600">
+
+        <table width="600" align="center" cellspacing="2" cellpadding="1">
+            <tr>
+                <td width="190">Product:</td>
+                <td>
+                    <select name="product" id="product">
+                        <option value="ScanMaster">ScanMaster</option>
+                        <option value="PhotoMaster">PhotoMaster</option>
+                        <option value="PrintMaster">PrintMaster</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="date">Date Purchased:</label></td>
+                <td><input type="text" name="date" id="date" size="16"></td>
+            </tr>
+            <tr>
+                <td><label for="serial">Serial #:</label></td>
+                <td><input type="text" name="serial" id="serial" size="16"></td>
+            </tr>
+            <tr>
+                <td valign="top">Used for:</td>
+                <td>
+                    <table cellspacing="0" cellpadding="1">
+                        <tr>
+                            <td width="135"><input type="radio" name="usedfor" id="home" value="Home"><label for="home">Home</label></td>
+                            <td><input type="radio" name="usedfor" id="edu" value="Educational Institution"><label for="edu">Educational Institution</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" name="usedfor" id="business" value="Business" checked><label for="business">Business</label></td>
+                            <td><input type="radio" name="usedfor" id="other" value="Other"><label for="other">Other</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input type="radio" name="usedfor" id="gov" value="Government"><label for="gov">Government</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">System (check all that apply):</td>
+                <td>
+                    <table cellspacing="0" cellpadding="1">
+                        <tr>
+                            <td width="135"><input type="checkbox" name="system" id="windows" value="Windows"><label for="windows">Windows</label></td>
+                            <td><input type="checkbox" name="system" id="unix" value="UNIX"><label for="unix">UNIX</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="system" id="mac" value="Macintosh"><label for="mac">Macintosh</label></td>
+                            <td><input type="checkbox" name="system" id="sysother" value="Other"><label for="sysother">Other</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <hr width="600">
+
+        <table width="600" align="center" cellspacing="2" cellpadding="1">
+            <tr>
+                <td width="190" valign="top"><label for="comments">Comments?:</label></td>
+                <td><textarea name="comments" id="comments" rows="7" cols="42"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Click to register" onclick="dangKy()">
+                    <input type="button" value="Click to cancel" onclick="xoaForm()">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+    <script>
+        function dangKy() {
+            alert("Đăng ký thành công!");
+            document.getElementById("regForm").submit(); // gửi dữ liệu, hiện lên thanh địa chỉ
+        }
+
+        function xoaForm() {
+            var f = document.getElementById("regForm");
+            // Xóa trắng các ô text và textarea
+            var els = f.querySelectorAll("input[type=text], textarea");
+            for (var i = 0; i < els.length; i++) els[i].value = "";
+            // Bỏ chọn radio và checkbox
+            var ch = f.querySelectorAll("input[type=radio], input[type=checkbox]");
+            for (var j = 0; j < ch.length; j++) ch[j].checked = false;
+            // Đưa danh sách chọn về mục đầu tiên
+            f.product.selectedIndex = 0;
+        }
+    </script>
+</body>
+</html>
