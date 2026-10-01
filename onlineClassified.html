@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <title>Tiêu đề trang</title>
+    </head>
+    <body style="background-color: #ccffff;">
+        <h1 style="color: red;">Online Classifieds Search Form</h1>
+        <hr/>
+        <form id="regForm" action="" method="get">
+            <table cellspacing="0" cellpadding="1">
+                <tr>
+                    <td style="font-weight: bold;">1) Search for a classified in the following sections: </td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="search"  id="Employment" value="Employment"><label for="Employment">Employment</label></td>
+                    <td><input type="radio" name="search" id="Personal" value="Personal"><label for="Personal">Personal</label></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="search" id="For Sale" value="For Sale" checked><label for="For Sale">For Sale</label></td>
+                    <td><input type="radio" name="search" id="Miscellanecus" value="Miscellanecus"><label for="Miscellanecus">Miscellanecus</label></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="search" id="hou" value="Miscellanecus"><label for="hou">Housing</label></td>
+                    <td><input type="radio" name="search" id="all" value="All of above"><label for="all">All of above</label></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">2) Search the following publications: </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table cellspacing="0" cellpadding="1">
+                            <tr>
+                                <td><input type="checkbox" id="MidWest times" value="MidWest times"><label for="MidWest times">MidWest times</label></td>
+                                <td><input type="checkbox" id="Modern News" value="Modern News"><label for="Modern News">Modern News</label></td>
+                                <td><input type="checkbox" id="Employment Today" value="Employment Today"><label for="Employment Today">Employment Today</label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"  id="gre" value="Great Lakes Classifieds"><label for="gre">Great Lakes Classifieds</label></td>
+                                <td><input type="checkbox"  id="mid" value="Middleton Daily"><label for="mid">Middleton Daily</label></td>
+                                <td><input type="checkbox"  id="cash" value="Cashtown Daily News"><label for="cash">Cashtown Daily News</label></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="font-weight: bold;">3) From to: </td>
+                    <td><input type="date" name="dob" id="dob"></td>
+                    <td style="font-weight: bold;">to </td>
+                    <td><input type="date" name="dob" id="dob"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="font-weight: bold;">4) Enter a few keywords to describe the classified</td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="keywords" id="keywords" style="width:700;"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">5) Click one of the options below: </td>
+                </tr>
+                <tr>
+                    <td><img src="Bai49/Search.gif" alt="Search" style="cursor: pointer;" onclick="timKiem()">
+                        <img src="Bai49/Help.gif"   alt="Help"   style="cursor: pointer;" onclick="troGiup()">
+                        <img src="Bai49/Cancel.gif" alt="Cancel" style="cursor: pointer;" onclick="xoaForm()"></td>
+                </tr>
+            </table>
+        </form>
+        <script>
+            // Search -> giả lập tìm kiếm
+            function timKiem() {
+                alert("Đang tìm kiếm...");
+            }
+     
+            // Help -> hiển thị trang help
+            function troGiup() {
+                window.open("Help.html", "_blank", "width=500,height=400");
+            }
+     
+            // Cancel -> xóa trắng dữ liệu trên form
+            function xoaForm() {
+                var f = document.getElementById("regForm");
+
+                // Xóa trắng ô text, ô ngày, textarea
+                var els = f.querySelectorAll("input[type=text], input[type=date], textarea");
+                for (var i = 0; i < els.length; i++) els[i].value = "";
+
+                // Bỏ chọn radio và checkbox
+                var ch = f.querySelectorAll("input[type=radio], input[type=checkbox]");
+                for (var j = 0; j < ch.length; j++) ch[j].checked = false;
+
+                // Đưa mọi danh sách chọn (nếu có) về mục đầu tiên
+                var sel = f.querySelectorAll("select");
+                for (var k = 0; k < sel.length; k++) sel[k].selectedIndex = 0;
+            }
+        </script>
+    </body>
+</html>
