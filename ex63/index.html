@@ -1,0 +1,257 @@
+<html>
+    <head>
+        <title>Đăng ký thành viên</title>
+        <style>
+            table.form-table {
+                border-collapse: collapse;
+            }
+            table.form-table td {
+                padding: 4px;
+            }
+            /* Style cho bảng hiển thị kết quả */
+            #tblKetQua {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+            #tblKetQua th {
+                background-color: blue;
+                color: white;
+                padding: 6px;
+                border: 1px solid #000;
+            }
+            #tblKetQua td {
+                padding: 6px;
+                border: 1px solid #000;
+            }
+        </style>
+        <script>
+            window.addEventListener("DOMContentLoaded", function () {
+                // Tự động tạo Ngày từ 01 đến 31
+                var selectNgay = document.getElementById("ddlNgay");
+                for (var i = 1; i <= 31; i++) {
+                    var val = i < 10 ? "0" + i : i;
+                    selectNgay.add(new Option(val, val));
+                }
+        
+                // Tự động tạo Tháng từ 1 đến 12
+                var selectThang = document.getElementById("ddlThang");
+                for (var i = 1; i <= 12; i++) {
+                    selectThang.add(new Option(i, i));
+                }
+        
+                // Tự động tạo Năm từ 1900 đến năm hiện tại
+                var selectNam = document.getElementById("ddlNam");
+                var namHienTai = new Date().getFullYear();
+                for (var i = 1900; i <= namHienTai; i++) {
+                    var opt = new Option(i, i);
+                    if (i === 1970) opt.selected = true;
+                    selectNam.add(opt);
+                }
+            });
+
+            // 1. Hàm Đăng ký
+            function dangKy() {
+                var ten = document.getElementById("txtten").value.trim();
+                var email = document.getElementById("txtemail").value.trim();
+
+                // Kiểm tra tên không được bỏ trống
+                if (ten === "") {
+                    alert("Vui lòng nhập Tên!");
+                    document.getElementById("txtten").focus();
+                    return;
+                }
+
+                // Kiểm tra email hợp lệ
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email === "") {
+                    alert("Vui lòng nhập Email!");
+                    document.getElementById("txtemail").focus();
+                    return;
+                } else if (!emailRegex.test(email)) {
+                    alert("Email không hợp lệ!");
+                    document.getElementById("txtemail").focus();
+                    return;
+                }
+
+                // Lấy Giới tính
+                var gioitinh = "";
+                var radGioiTinh = document.getElementsByName("gioitinh");
+                for (var i = 0; i < radGioiTinh.length; i++) {
+                    if (radGioiTinh[i].checked) {
+                        gioitinh = radGioiTinh[i].value;
+                        break;
+                    }
+                }
+
+                // Lấy Ngày tháng năm sinh (định dạng dd/mm/yyyy)
+                var ngay = document.getElementById("ddlNgay").value;
+                var thang = document.getElementById("ddlThang").value;
+                thang = thang < 10 ? "0" + parseInt(thang) : thang;
+                var nam = document.getElementById("ddlNam").value;
+                var ngaysinh = ngay + "/" + thang + "/" + nam;
+
+                // Lấy Sở thích (dạng chuỗi cách nhau bởi dấu phẩy)
+                var listSoThich = [];
+                var chkSoThich = document.getElementsByName("system");
+                for (var i = 0; i < chkSoThich.length; i++) {
+                    if (chkSoThich[i].checked) {
+                        var label = document.querySelector('label[for="' + chkSoThich[i].id + '"]');
+                        if (label) listSoThich.push(label.innerText.toLowerCase());
+                    }
+                }
+                var soThichStr = listSoThich.join(", ");
+
+                // Lấy Màu yêu thích
+                var mauYeuThich = "";
+                var radColor = document.getElementsByName("color");
+                for (var i = 0; i < radColor.length; i++) {
+                    if (radColor[i].checked) {
+                        var labelColor = document.querySelector('label[for="' + radColor[i].id + '"]');
+                        if (labelColor) mauYeuThich = labelColor.innerText;
+                        break;
+                    }
+                }
+
+                // Thêm một dòng mới vào Table kết quả
+                var tbody = document.getElementById("tblKetQua").getElementsByTagName("tbody")[0];
+                var newRow = tbody.insertRow();
+
+                // Sự kiện rê chuột đổi màu nền dòng trong Table
+                newRow.onmouseover = function () {
+                    this.style.backgroundColor = "yellow";
+                };
+                newRow.onmouseout = function () {
+                    this.style.backgroundColor = "white";
+                };
+
+                // Chèn các ô dữ liệu
+                newRow.insertCell(0).innerText = ten;
+                newRow.insertCell(1).innerText = email;
+                newRow.insertCell(2).innerText = gioitinh;
+                newRow.insertCell(3).innerText = ngaysinh;
+                newRow.insertCell(4).innerText = soThichStr;
+                newRow.insertCell(5).innerText = mauYeuThich;
+            }
+
+            // 2. Hàm Tiếp (Làm mới form)
+            function lamTiep() {
+                document.getElementById("frmDangKy").reset();
+                document.getElementById("txtten").focus();
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Đăng ký thành viên</h1>
+        <hr/>
+        <form id="frmDangKy">
+            <table class="form-table">
+                <tr>
+                    <td>Tên(*)</td>
+                    <td><input type="text" id="txtten"></td>
+                </tr>
+                <tr>
+                    <td>Ngày sinh(*)</td>
+                    <td>
+                        Ngày: <select id="ddlNgay"></select>
+                        Tháng: <select id="ddlThang"></select>
+                        Năm: <select id="ddlNam"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Giới tính(*)</td>
+                    <td>
+                        <input type="radio" id="Nam" name="gioitinh" value="Nam">
+                        <label for="Nam">Nam</label>
+                
+                        <input type="radio" id="Nu" name="gioitinh" value="Nữ">
+                        <label for="Nu">Nữ</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email(*)</td>
+                    <td><input type="text" id="txtemail"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Sở thích của bạn:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table cellspacing="0" cellpadding="1">
+                            <tr>
+                                <td width="135"><input type="checkbox" name="system" id="muasam" value="muasam"><label for="muasam">Mua sắm</label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="system" id="dulich" value="dulich"><label for="dulich">Du lịch</label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="system" id="tangau" value="tangau"><label for="tangau">Tán gẫu</label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="system" id="docsach" value="docsach"><label for="docsach">Đọc sách</label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="system" id="nghenhac" value="nghenhac"><label for="nghenhac">Nghe nhạc</label></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Màu yêu thích của bạn:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="radio" id="Xanh" name="color" value="Xanh">
+                        <label for="Xanh" style="background-color: blue; color: white;">Màu xanh da trời</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="radio" id="Do" name="color" value="Do">
+                        <label for="Do" style="background-color: red; color: white;">Màu đỏ</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="radio" id="Vang" name="color" value="Vang">
+                        <label for="Vang" style="background-color: yellow; color: black;">Màu vàng</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="radio" id="Xanhlacay" name="color" value="Xanhlacay">
+                        <label for="Xanhlacay" style="background-color: green; color: white;">Màu xanh lá cây</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="radio" id="Tim" name="color" value="Tim">
+                        <label for="Tim" style="background-color: purple; color: white;">Màu xanh tím</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 10px;">
+                        <button type="button" onclick="dangKy()">Đăng ký</button>
+                        <button type="button" onclick="lamTiep()">Tiếp</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <!-- Bảng hiển thị thông tin đăng ký -->
+        <table id="tblKetQua">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Giới tính</th>
+                    <th>Năm sinh</th>
+                    <th>Sở thích</th>
+                    <th>Màu yêu thích</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </body>
+</html>
