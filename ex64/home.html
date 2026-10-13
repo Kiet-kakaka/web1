@@ -1,0 +1,186 @@
+<html>
+<head>
+    <title>Bài 64: Dynamic Table</title>
+    <style>
+
+        /* Đồng hồ điện tử */
+        #clock {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Dòng nhận phản hồi chuột */
+        #mouse-target {
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        /* Định dạng bảng */
+        table {
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            min-width: 400px;
+        }
+
+        table, td {
+            border: 1px solid #777;
+        }
+
+        td {
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        /* Dòng được chọn (tô nền đỏ, chữ trắng để dễ đọc) */
+        tr.selected {
+            background-color: red !important;
+            color: white;
+        }
+
+        /* Trạng thái chỉ hiển thị dòng (ẩn viền dọc) */
+        table.only-rows td {
+            border-left: none !important;
+            border-right: none !important;
+            border-top: 1px solid #777;
+            border-bottom: 1px solid #777;
+        }
+
+        /* Trạng thái chỉ hiển thị cột (ẩn viền ngang) */
+        table.only-cols td {
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: 1px solid #777;
+            border-right: 1px solid #777;
+        }
+
+        /* Bố cục nhóm nút bấm */
+        .button-group button {
+            padding: 5px 10px;
+            margin-right: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Đồng hồ điện tử -->
+    <div id="clock">00:00:00</div>
+
+    <!-- 2. Dòng nhận diện sự kiện click chuột -->
+    <div id="mouse-target">Click chuột vào dòng này. Sẽ xuất hiện thông báo phím bấm của chuột</div>
+
+    <!-- 3. Bảng Dynamic Table -->
+    <table id="dynamicTable">
+        <tr>
+            <td>Thêm dòng mới ở đây</td>
+            <td>Thêm dòng mới ở đây</td>
+        </tr>
+        <tr>
+            <td>Thêm dòng mới ở đây</td>
+            <td>Thêm dòng mới ở đây</td>
+        </tr>
+        <tr>
+            <td>Thêm dòng mới ở đây</td>
+            <td>Thêm dòng mới ở đây</td>
+        </tr>
+        <tr>
+            <td>Dòng 1 cột 1</td>
+            <td>Dòng 1 cột 2</td>
+        </tr>
+        <tr>
+            <td>Dòng 2 cột 1</td>
+            <td>Dòng 2 cột 2</td>
+        </tr>
+        <tr>
+            <td>Dòng 3 cột 1</td>
+            <td>Dòng 3 cột 2</td>
+        </tr>
+    </table>
+
+    <!-- 4. Nhóm nút chức năng -->
+    <div class="button-group">
+        <button onclick="addRow()">Thêm vào</button>
+        <button onclick="deleteSelectedRows()">Xoá</button>
+        <button onclick="showOnlyRows()">Chỉ hiện dòng</button>
+        <button onclick="showOnlyCols()">Chỉ hiện cột</button>
+        <button onclick="openNewPage()">Mở một trang mới</button>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Chạy ngay khi tải trang
+
+        const mouseTarget = document.getElementById('mouse-target');
+
+        // Click chuột trái
+        mouseTarget.addEventListener('click', function (e) {
+            alert('Bạn đã nhấn chuột trái');
+        });
+
+        // Click chuột phải
+        mouseTarget.addEventListener('contextmenu', function (e) {
+            e.preventDefault(); // Ngăn menu chuột phải mặc định hiện ra
+            alert('Bạn đã nhấn chuột phải');
+        });
+
+        function attachRowClickEvent(row) {
+            row.addEventListener('click', function () {
+                this.classList.toggle('selected');
+            });
+        }
+
+        // Gán sự kiện click cho tất cả các dòng hiện có ban đầu
+        const initialRows = document.querySelectorAll('#dynamicTable tr');
+        initialRows.forEach(row => attachRowClickEvent(row));
+
+        // Nút "Thêm vào": Chèn 1 dòng <tr> mới vào Table
+        function addRow() {
+            const table = document.getElementById('dynamicTable');
+            const newRow = table.insertRow(); // Chèn dòng mới ở cuối bảng
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+
+            cell1.innerText = 'Thêm dòng mới ở đây';
+            cell2.innerText = 'Thêm dòng mới ở đây';
+
+            // Gán lại sự kiện tô nền đỏ cho dòng vừa thêm[cite: 1]
+            attachRowClickEvent(newRow);
+        }
+
+        // Nút "Xoá": Dòng nào có nền đỏ thì xóa hết[cite: 1]
+        function deleteSelectedRows() {
+            const selectedRows = document.querySelectorAll('#dynamicTable tr.selected');
+            selectedRows.forEach(row => row.remove());
+        }
+
+        // Nút "Chỉ hiện dòng": Chuyển giao diện chỉ hiển thị viền dòng[cite: 1]
+        function showOnlyRows() {
+            const table = document.getElementById('dynamicTable');
+            table.classList.remove('only-cols');
+            table.classList.add('only-rows');
+        }
+
+        // Nút "Chỉ hiện cột": Chuyển giao diện chỉ hiển thị viền cột[cite: 1]
+        function showOnlyCols() {
+            const table = document.getElementById('dynamicTable');
+            table.classList.remove('only-rows');
+            table.classList.add('only-cols');
+        }
+
+        function openNewPage() {
+            window.open('https://tranduythanh.com/', '_blank');
+        }
+    </script>
+</body>
+</html>
